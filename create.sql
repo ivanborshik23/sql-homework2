@@ -1,0 +1,46 @@
+CREATE TABLE IF NOT EXISTS genre (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS artist (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS compilation (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    year INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS album (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    year INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS track (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    duration INTEGER NOT NULL,
+    album_id INTEGER NOT NULL REFERENCES album(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS genre_artist (
+    genre_id INTEGER NOT NULL REFERENCES genre(id) ON DELETE CASCADE,
+    artist_id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE,
+    CONSTRAINT pk_genre_artist PRIMARY KEY (genre_id, artist_id)
+);
+
+CREATE TABLE IF NOT EXISTS album_artist (
+    album_id INTEGER NOT NULL REFERENCES album(id) ON DELETE CASCADE,
+    artist_id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE,
+    CONSTRAINT pk_album_artist PRIMARY KEY (album_id, artist_id)
+);
+
+CREATE TABLE IF NOT EXISTS compilation_track (
+    compilation_id INTEGER NOT NULL REFERENCES compilation(id) ON DELETE CASCADE,
+    track_id INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE,
+    CONSTRAINT pk_compilation_track PRIMARY KEY (compilation_id, track_id)
+);
